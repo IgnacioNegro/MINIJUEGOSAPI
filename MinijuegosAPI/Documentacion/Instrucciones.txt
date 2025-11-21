@@ -1,0 +1,73 @@
+🚀 Cómo correr el proyecto
+
+✅ Requisitos
+- .NET SDK 8.0
+- Visual Studio 2022 (o VS Code)
+- SQL Server o SQLite
+
+1) Clonar y restaurar
+git clone <URL_DE_TU_REPO>
+cd MinijuegosAPI
+dotnet restore
+
+2) Configurar la base de datos
+
+Opción A — SQL Server
+En appsettings.json:
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=MinijuegosDb;User Id=sa;Password=<TU_PASSWORD>;TrustServerCertificate=True"
+  }
+}
+
+Opción B — SQLite
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=Minijuegos.db"
+  }
+}
+
+3) Crear BD y aplicar migraciones
+dotnet ef migrations add InitialCreate --project MinijuegosAPI
+dotnet ef database update --project MinijuegosAPI
+
+4) Ejecutar la API
+dotnet run --project MinijuegosAPI
+
+Swagger UI: https://localhost:7134/swagger
+
+5) Endpoints principales
+
+GET /api/minijuegos/pregunta?tipo=Matematicas|Memoria|Logica
+POST /api/minijuegos/validar
+
+Body ejemplo:
+{
+  "preguntaId": 1,
+  "respuesta": "135"
+}
+
+6) Tests y cobertura
+dotnet test MinijuegosAPI.Tests
+dotnet tool install --global dotnet-reportgenerator-globaltool
+dotnet test MinijuegosAPI.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report
+
+7) Estructura del repo
+MinijuegosAPI/
+├── Controllers/
+├── Data/
+├── Infraestructura/Repositorio/
+├── Models/Dtos/
+├── Models/Entidades/
+├── Services/
+├── appsettings.json
+└── Program.cs
+MinijuegosAPI.Tests/
+docs/
+
+8) Notas útiles
+- Swagger muestra ejemplos de request/response.
+- DI/IOC: Todos los servicios y estrategias están registrados en Program.cs.
+- Patrones: Strategy, Factory, Repository, Dependency Injection.
+- Antes de commitear, ejecutar tests y verificar Swagger.

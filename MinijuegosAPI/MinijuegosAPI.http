@@ -1,0 +1,6 @@
+@MinijuegosAPI_HostAddress = http://localhost:5220
+
+GET {{MinijuegosAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
